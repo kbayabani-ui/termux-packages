@@ -17,4 +17,4 @@ jobs:
         if: always()
         with:
           name: bootstrap-aarch64
-          path: bootstrap-*.zip
+          path: output/bootstrap-*.zip

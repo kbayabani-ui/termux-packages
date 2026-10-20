@@ -1,0 +1,21 @@
+Architectures: aarch64
+Codename: stable
+Components: main
+Date: Tue, 20 Oct 2026 07:24:30 +0000
+Suite: stable
+MD5Sum:
+ c34d5b4d23c2180740ff4059c5e80652              109 Release
+ 50fd7b0e47dcf16f9c9399f308a5bd1a            81207 main/binary-aarch64/Packages
+ 44901957050c506052ec93737a38bd32            31358 main/binary-aarch64/Packages.gz
+SHA1:
+ 8c539c9acbef8db7ba7db994fc7eff32eefbb2e8              109 Release
+ 20427953f77666e7d778986ff258738a1493f444            81207 main/binary-aarch64/Packages
+ 98f9d95c6247136bb4852e558e93992fe3447194            31358 main/binary-aarch64/Packages.gz
+SHA256:
+ 3f68febbe5f55da929c9e114968d4786a5d714350b2956dfafb04952fc5f13b3              109 Release
+ 6ff81901a8881dfec379c8ee5b2346238668041828a5ea61cd56ff1b56a7fcda            81207 main/binary-aarch64/Packages
+ 45d251e7bd38740b2a07a8701ee183f3e7d11ca69207a973606573c99a5825f6            31358 main/binary-aarch64/Packages.gz
+SHA512:
+ 481252e7059fa0a71da4c772e16ae0eb8b15bdc18b45da2bcc0d2ff1527c96f8e168e812ffe9326d155ad9b8daf38707be0edc6db467f6dce846d26bbedbb2a9              109 Release
+ 62e73270e6b33f8724d580af22c0c5d0bc7ea5f96be298a400ca435ad323785ecee30156b880c0d635590c9f7f2ab80c69b1663fd09493e0ea897138a3359bd4            81207 main/binary-aarch64/Packages
+ 2af0238d8890430dd716f8f352464309b745e0611752f7108d88ce440e51b78ba4cb165595bbeb2cff551abfed9c2e817d07571d0aef0307cfd729a348435cd9            31358 main/binary-aarch64/Packages.gz

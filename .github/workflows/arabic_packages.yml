@@ -1,0 +1,66 @@
+name: Build Arabic packages
+on:
+  workflow_dispatch:
+    inputs:
+      packages:
+        description: "space-separated names (empty = arabic-packages.txt)"
+        required: false
+  push:
+    branches: [arabic-pkg]
+    paths: ['arabic-packages.txt']
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+      - name: Free disk space
+        run: sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/lib/android
+      - name: Build packages
+        env:
+          INPUT_PKGS: ${{ github.event.inputs.packages }}
+        run: |
+          PKGS="$INPUT_PKGS"
+          if [ -z "$PKGS" ]; then PKGS="$(grep -v '^#' arabic-packages.txt | tr '\n' ' ')"; fi
+          echo "Building: $PKGS"
+          chmod a+rwx .
+          ./scripts/run-docker.sh ./build-package.sh -a aarch64 $PKGS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: debs-aarch64
+          path: output/*.deb
+      - name: Publish apt repo
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -e
+          git config --global user.name "arabic-bot"
+          git config --global user.email "bot@users.noreply.github.com"
+          URL="https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git"
+          if git ls-remote --exit-code --heads "$URL" apt-repo >/dev/null 2>&1; then
+            git clone --depth 1 -b apt-repo "$URL" repo
+          else
+            mkdir repo
+          fi
+          cd repo
+          rm -rf .git
+          mkdir -p pool dists/stable/main/binary-aarch64
+          cp ../output/*.deb pool/
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq apt-utils
+          apt-ftparchive packages pool > dists/stable/main/binary-aarch64/Packages
+          gzip -k -f dists/stable/main/binary-aarch64/Packages
+          apt-ftparchive \
+            -o APT::FTPArchive::Release::Suite=stable \
+            -o APT::FTPArchive::Release::Codename=stable \
+            -o APT::FTPArchive::Release::Architectures=aarch64 \
+            -o APT::FTPArchive::Release::Components=main \
+            release dists/stable > dists/stable/Release
+          git init -q -b apt-repo
+          git add -A
+          git commit -q -m "update $(date -u +%F)"
+          git push -f "$URL" apt-repo:apt-repo

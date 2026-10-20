@@ -1,1 +1,1 @@
-git openssh wget zip
+curl openssl nano vim neovim tmux zsh fish ripgrep fd jq tree rsync unzip p7zip sqlite make cmake ninja pkg-config nodejs ruby php golang lua54 file htop ncdu bat fzf less man gawk patch diffutils

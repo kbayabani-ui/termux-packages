@@ -27,11 +27,6 @@ jobs:
           echo "Building: $PKGS"
           chmod a+rwx .
           ./scripts/run-docker.sh ./build-package.sh -a aarch64 $PKGS
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: debs-aarch64
-          path: output/*.deb
       - name: Publish apt repo
         env:
           GH_TOKEN: ${{ github.token }}
@@ -50,6 +45,9 @@ jobs:
           rm -rf .git
           mkdir -p pool dists/stable/main/binary-aarch64
           cp ../output/*.deb pool/
+          cd pool
+          for f in *:*.deb; do [ -e "$f" ] && mv "$f" "$(echo "$f" | sed 's/_[0-9]*:/_/')"; done
+          cd ..
           sudo apt-get update -qq
           sudo apt-get install -y -qq apt-utils
           apt-ftparchive packages pool > dists/stable/main/binary-aarch64/Packages
